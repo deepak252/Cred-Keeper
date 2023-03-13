@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/navHome"
+        android:title="Home"
+        android:icon="@drawable/round_home_24"
+        />
+    <item
+        android:id="@+id/navBookmarks"
+        android:title="Bookmark"
+        android:icon="@drawable/outline_bookmark_24"
+        />
+    <item
+        android:id="@+id/navProfile"
+        android:title="Profile"
+        android:icon="@drawable/round_person_24"
+        />
+</menu>
