@@ -26,4 +26,10 @@ class HomeViewModel(private val credRepository: CredRepository ) : ViewModel() {
         credRepository.deleteCred(credId)
     }
 
+    fun searchCred(query : String){
+        credRepository.searchAllCreds(query)
+    }
+
+    fun clearSearch()= credRepository.clearSearch()
+
 }

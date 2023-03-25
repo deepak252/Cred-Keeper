@@ -20,5 +20,11 @@ class BookmarksViewModel(private val credRepository: CredRepository) : ViewModel
     fun deleteCred(credId : Int){
         credRepository.deleteCred(credId)
     }
+
+    fun searchCred(query : String){
+        credRepository.searchBookmarkedCreds(query)
+    }
+
+    fun clearSearch()= credRepository.clearSearch()
 }
 

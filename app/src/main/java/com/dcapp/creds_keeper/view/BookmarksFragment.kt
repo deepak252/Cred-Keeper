@@ -19,16 +19,10 @@ import com.dcapp.creds_keeper.viewmodel.BookmarksViewModelFactory
 
 class BookmarksFragment : Fragment() {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("MyTag", "BookmarksFragment -> onCreate")
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d("MyTag", "BookmarksFragment -> onCreateView")
         return inflater.inflate(R.layout.fragment_bookmarks, container, false)
     }
 
@@ -60,36 +54,6 @@ class BookmarksFragment : Fragment() {
         bookmarksViewModel.getBookmarkCredLiveList().observe(requireActivity()){
             creds->credListAdapter.setCreds(creds)
         }
-    }
-
-    override fun onStart() {
-        Log.d("MyTag", "BookmarksFragment -> onStart")
-        super.onStart()
-    }
-
-    override fun onResume() {
-        Log.d("MyTag", "BookmarksFragment -> onResume")
-        super.onResume()
-    }
-
-    override fun onPause() {
-        Log.d("MyTag", "BookmarksFragment -> onPause")
-        super.onPause()
-    }
-
-    override fun onStop() {
-        Log.d("MyTag", "BookmarksFragment -> onStop")
-        super.onStop()
-    }
-
-    override fun onDestroyView() {
-        Log.d("MyTag", "BookmarksFragment -> onDestroyView")
-        super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        Log.d("MyTag", "BookmarksFragment -> onDestroy")
-        super.onDestroy()
     }
 
 }

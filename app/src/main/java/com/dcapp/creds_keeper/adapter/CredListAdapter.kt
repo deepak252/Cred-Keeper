@@ -82,7 +82,11 @@ class CredListAdapter(
 
     override fun onBindViewHolder(holder: CredViewHolder, position: Int) {
         val cred = credList[position]
-        holder.tvLeading.text = cred.title.substring(0,1)
+        if(cred.title.isNotEmpty()){
+            holder.tvLeading.text = cred.title.substring(0,1)
+        }else{
+            holder.tvLeading.text = "#"
+        }
         holder.tvTitle.text = cred.title
         holder.tvUId.text = cred.uid
         holder.tvPwd.text = cred.pwd
@@ -136,8 +140,10 @@ class CredListAdapter(
 
     private fun editCred(cred : Cred){
         val editCredDialog = EditCredDialog(context, cred, homeViewModel, bookmarksViewModel)
-        editCredDialog.show()
-        editCredDialog.window?.setLayout(LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT)
+        editCredDialog.apply {
+            show()
+            setTitle("Edit Credential")
+        }
     }
 
     private fun confirmDeleteCred(cred : Cred){

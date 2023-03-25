@@ -1,52 +1,98 @@
 package com.dcapp.creds_keeper
 
+import android.animation.LayoutTransition
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.dcapp.creds_keeper.databinding.ActivityMainBinding
 import com.dcapp.creds_keeper.model.Cred
+import com.dcapp.creds_keeper.repository.CredRepository
+import com.dcapp.creds_keeper.utils.KeyboardUtils
 import com.dcapp.creds_keeper.view.BookmarksFragment
 import com.dcapp.creds_keeper.view.HomeFragment
 import com.dcapp.creds_keeper.view.ProfileFragment
+import com.dcapp.creds_keeper.viewmodel.*
+import com.google.android.material.appbar.AppBarLayout
 import com.google.android.material.bottomnavigation.BottomNavigationView
-//
-//var creds = arrayListOf<Cred>(
-//    Cred(0,"Coding Ninja", "deepak@gmail.com", "1234","",false),
-//    Cred(1,"Codeforces", "deepak@gmail.com", "981234","",false),
-//    Cred(2,"Gmail", "deepak@gmail.com", "SD1234","",false),
-//    Cred(3,"Google", "deepak@gmail.com", "##1234","",false),
-//    Cred(4,"Facebook", "deepak@gmail.com", "GHD1234","",false),
-//    Cred(5,"Twitter", "deepak@gmail.com", "0931234","",false),
-//    Cred(6,"Instagram", "deepak@gmail.com", "ERER013234","",false),
-//    Cred(7,"Flipkart", "deepak@gmail.com", "FLIP@#$@","",false),
-//)
+
 
 class MainActivity : AppCompatActivity() {
-    lateinit var bottomNavigation : BottomNavigationView
     private val homeFragment = HomeFragment()
     private val bookmarksFragment = BookmarksFragment()
     private val profileFragment = ProfileFragment()
+    private lateinit var mainViewModel: MainViewModel
+    private lateinit var homeViewModel: HomeViewModel
+    private lateinit var bookmarksViewModel: BookmarksViewModel
+    private lateinit var binding : ActivityMainBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.lifecycleOwner = this
 
-        initBottomNav()
+        homeViewModel = ViewModelProvider(this, HomeViewModelFactory(CredRepository.getInstance()))[HomeViewModel::class.java]
+        bookmarksViewModel = ViewModelProvider(this, BookmarksViewModelFactory(CredRepository.getInstance()))[BookmarksViewModel::class.java]
+        mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        binding.mainViewModel = mainViewModel
+
+        setToolbar()
+        setBottomNav()
 
     }
 
-    private fun initBottomNav(){
-        bottomNavigation = findViewById(R.id.bottomNav)
+    private fun setToolbar(){
+        binding.appbarMain.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
+        binding.appbarMain.animate().apply {
+            duration = 2000
+        }
 
+        binding.btnSearch.setOnClickListener {
+            mainViewModel.toggleSearch()
+            binding.edtSearchCred.requestFocus()
+            KeyboardUtils.showKeyboard(this, binding.edtSearchCred)
+        }
+
+        binding.btnCancelSearch.setOnClickListener {
+            if(binding.edtSearchCred.text.isNotEmpty()){
+                binding.edtSearchCred.text.clear()
+            }else{
+                mainViewModel.toggleSearch()
+                binding.edtSearchCred.clearFocus()
+                KeyboardUtils.hideKeyboard(this, binding.edtSearchCred)
+                if(mainViewModel.bottomNavIndexLiveData.value==0){
+                    homeViewModel.clearSearch()
+                }else if(mainViewModel.bottomNavIndexLiveData.value==1){
+                    bookmarksViewModel.clearSearch()
+                }
+            }
+        }
+
+        binding.edtSearchCred.addTextChangedListener {
+            if(mainViewModel.bottomNavIndexLiveData.value==0){
+                homeViewModel.searchCred(it.toString())
+            }else if(mainViewModel.bottomNavIndexLiveData.value==1){
+                bookmarksViewModel.searchCred(it.toString())
+            }
+        }
+    }
+
+    private fun setBottomNav(){
         loadFragment(homeFragment)
 
         supportFragmentManager.beginTransaction()
             .replace(R.id.frameDashboard,homeFragment)
             .commit()
-        bottomNavigation.setOnItemSelectedListener { menuItem->
+        binding.bottomNav.setOnItemSelectedListener { menuItem->
             when(menuItem.itemId){
                 R.id.navHome->{
                     if(!homeFragment.isAdded){
+                        mainViewModel.updateBottomNavIndex(0)
                         loadFragment(homeFragment)
                     }else{
                         Toast.makeText(this,"Already in home", Toast.LENGTH_SHORT).show()
@@ -54,6 +100,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.navBookmarks->{
                     if(!bookmarksFragment.isAdded){
+                        mainViewModel.updateBottomNavIndex(1)
                         loadFragment(bookmarksFragment)
                     }else{
                         Toast.makeText(this,"Already in bookmarks", Toast.LENGTH_SHORT).show()
@@ -61,6 +108,7 @@ class MainActivity : AppCompatActivity() {
                 }
                 R.id.navProfile->{
                     if(!profileFragment.isAdded){
+                        mainViewModel.updateBottomNavIndex(2)
                         loadFragment(profileFragment)
                     }else{
                         Toast.makeText(this,"Already in profile", Toast.LENGTH_SHORT).show()

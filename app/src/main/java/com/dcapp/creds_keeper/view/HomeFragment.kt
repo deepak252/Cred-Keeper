@@ -25,17 +25,11 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 class HomeFragment : Fragment() {
     lateinit var btnAddNewCred : FloatingActionButton
     lateinit var rvCredList : RecyclerView
-    override fun onCreate(savedInstanceState: Bundle?) {
-        Log.d("MyTag", "HomeFragment -> onCreate")
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        Log.d("MyTag", "HomeFragment -> onCreateView")
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
@@ -49,9 +43,12 @@ class HomeFragment : Fragment() {
 
         btnAddNewCred.setOnClickListener{
             val addCredDialog = EditCredDialog(requireActivity(), homeViewModel = homeViewModel)
-            addCredDialog.show()
-            addCredDialog.window?.setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT)
+            addCredDialog.apply {
+                show()
+                setTitle("Add Credential")
+            }
         }
+
         val credListAdapter = CredListAdapter(
             requireActivity(),
             homeViewModel = homeViewModel
@@ -75,34 +72,5 @@ class HomeFragment : Fragment() {
     }
 
 
-    override fun onStart() {
-        Log.d("MyTag", "HomeFragment -> onStart")
-        super.onStart()
-    }
-
-    override fun onResume() {
-        Log.d("MyTag", "HomeFragment -> onResume")
-        super.onResume()
-    }
-
-    override fun onPause() {
-        Log.d("MyTag", "HomeFragment -> onPause")
-        super.onPause()
-    }
-
-    override fun onStop() {
-        Log.d("MyTag", "HomeFragment -> onStop")
-        super.onStop()
-    }
-
-    override fun onDestroyView() {
-        Log.d("MyTag", "HomeFragment -> onDestroyView")
-        super.onDestroyView()
-    }
-
-    override fun onDestroy() {
-        Log.d("MyTag", "HomeFragment -> onDestroy")
-        super.onDestroy()
-    }
 
 }
