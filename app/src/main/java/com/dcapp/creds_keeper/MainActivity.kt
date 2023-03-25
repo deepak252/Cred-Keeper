@@ -9,40 +9,30 @@ import com.dcapp.creds_keeper.view.BookmarksFragment
 import com.dcapp.creds_keeper.view.HomeFragment
 import com.dcapp.creds_keeper.view.ProfileFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-
-var creds = arrayListOf<Cred>(
-    Cred("Codechef", "deepak@gmail.com", "1234",""),
-    Cred("Codeforces", "deepak@gmail.com", "981234",""),
-    Cred("Gmail", "deepak@gmail.com", "SD1234",""),
-    Cred("Google", "deepak@gmail.com", "##1234",""),
-    Cred("Facebook", "deepak@gmail.com", "GHD1234",""),
-    Cred("Twitter", "deepak@gmail.com", "0931234",""),
-)
+//
+//var creds = arrayListOf<Cred>(
+//    Cred(0,"Coding Ninja", "deepak@gmail.com", "1234","",false),
+//    Cred(1,"Codeforces", "deepak@gmail.com", "981234","",false),
+//    Cred(2,"Gmail", "deepak@gmail.com", "SD1234","",false),
+//    Cred(3,"Google", "deepak@gmail.com", "##1234","",false),
+//    Cred(4,"Facebook", "deepak@gmail.com", "GHD1234","",false),
+//    Cred(5,"Twitter", "deepak@gmail.com", "0931234","",false),
+//    Cred(6,"Instagram", "deepak@gmail.com", "ERER013234","",false),
+//    Cred(7,"Flipkart", "deepak@gmail.com", "FLIP@#$@","",false),
+//)
 
 class MainActivity : AppCompatActivity() {
     lateinit var bottomNavigation : BottomNavigationView
     private val homeFragment = HomeFragment()
     private val bookmarksFragment = BookmarksFragment()
     private val profileFragment = ProfileFragment()
-//    lateinit var rvCredList : RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-
-        creds.addAll(creds)
-        creds.addAll(creds)
-        creds.addAll(creds)
-
         initBottomNav()
 
-
-
-//        rvCredList = findViewById(R.id.rvCredsHome)
-//
-//        rvCredList.adapter = HomeCredListAdapter(this,creds)
-//        rvCredList.layoutManager = LinearLayoutManager(this)
     }
 
     private fun initBottomNav(){

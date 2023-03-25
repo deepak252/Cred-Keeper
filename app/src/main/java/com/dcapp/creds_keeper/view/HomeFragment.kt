@@ -1,5 +1,6 @@
 package com.dcapp.creds_keeper.view
 
+import android.app.ActionBar.LayoutParams
 import android.app.Activity
 import android.os.Bundle
 import android.util.Log
@@ -7,15 +8,23 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.LifecycleOwner
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcapp.creds_keeper.R
 import com.dcapp.creds_keeper.adapter.CredListAdapter
-import com.dcapp.creds_keeper.creds
+import com.dcapp.creds_keeper.model.Cred
+import com.dcapp.creds_keeper.repository.CredRepository
+import com.dcapp.creds_keeper.view.dialog.EditCredDialog
+import com.dcapp.creds_keeper.viewmodel.HomeViewModel
+import com.dcapp.creds_keeper.viewmodel.HomeViewModelFactory
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class HomeFragment : Fragment() {
-
+    lateinit var btnAddNewCred : FloatingActionButton
+    lateinit var rvCredList : RecyclerView
     override fun onCreate(savedInstanceState: Bundle?) {
         Log.d("MyTag", "HomeFragment -> onCreate")
         super.onCreate(savedInstanceState)
@@ -33,10 +42,23 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val rvCredList: RecyclerView = view.findViewById(R.id.rvCredListHome)
-        creds.reverse()
+        btnAddNewCred = view.findViewById(R.id.btnAddNewCred)
+        rvCredList = view.findViewById(R.id.rvCredListHome)
+
+        val homeViewModel = ViewModelProvider(requireActivity(),HomeViewModelFactory(CredRepository.getInstance()))[HomeViewModel::class.java]
+
+        btnAddNewCred.setOnClickListener{
+            val addCredDialog = EditCredDialog(requireActivity(), homeViewModel = homeViewModel)
+            addCredDialog.show()
+            addCredDialog.window?.setLayout(LayoutParams.MATCH_PARENT,LayoutParams.WRAP_CONTENT)
+        }
+        val credListAdapter = CredListAdapter(
+            requireActivity(),
+            homeViewModel = homeViewModel
+        )
+
         rvCredList.apply {
-            adapter = CredListAdapter(activity as Activity, creds)
+            adapter = credListAdapter
             layoutManager = LinearLayoutManager(context)
             addItemDecoration(
                 DividerItemDecoration(
@@ -45,7 +67,13 @@ class HomeFragment : Fragment() {
                 )
             )
         }
+
+        homeViewModel.getCredLiveList().observe(requireActivity()) {
+            creds->credListAdapter.setCreds(creds)
+        }
+
     }
+
 
     override fun onStart() {
         Log.d("MyTag", "HomeFragment -> onStart")
