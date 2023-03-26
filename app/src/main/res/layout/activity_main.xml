@@ -22,7 +22,6 @@
             android:id="@+id/appbarMain"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/white"
             android:elevation="0dp"
             android:visibility="visible"
             app:elevation="0dp"
@@ -95,9 +94,12 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@{mainViewModel.bottomNavIndexLiveData==2 ? `Profile` : `Creds Keeper`}"
-                    android:textColor="@color/indigo"
                     android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    android:theme="@style/AppbarTitleStyle"
+
+                    />
+
 
                 <ImageView
                     android:id="@+id/btnSearch"
@@ -138,6 +140,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/bottom_nav_items" />
+            app:menu="@menu/bottom_nav_items"
+            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

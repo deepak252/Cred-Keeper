@@ -15,6 +15,10 @@
 
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="bottomNavigationStyle">@style/BottomNavStyle</item>
+        <item name="appBarLayoutStyle">@style/AppbarStyle</item>
+
+
         <!-- Customize your theme here. -->
 
 <!--        <item name="windowActionBar">false</item>-->
@@ -22,4 +26,24 @@
 <!--        <item name="android:windowFullscreen">true</item>-->
 
     </style>
+
+    <style name="BottomNavStyle" parent="Widget.MaterialComponents.BottomNavigationView.Colored">
+        <item name="android:background">@color/white</item>
+        <item name="itemTextColor">@color/bottom_nav_item_color</item>
+        <item name="itemIconTint">@color/bottom_nav_item_color</item>
+    </style>
+
+    <style name="AppbarStyle" parent="Widget.MaterialComponents.AppBarLayout.Primary">
+        <item name="android:background">@color/white</item>
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
+
+    <style name="AppbarTitleStyle">
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
+
+    <style name="EditTextStyle">
+        <item name="android:textColor">?attr/colorPrimary</item>
+    </style>
+
 </resources>
