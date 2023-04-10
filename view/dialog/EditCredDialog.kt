@@ -58,7 +58,7 @@ class EditCredDialog(
 
         btnSave.setOnClickListener {
             val cred2 = Cred(
-                cred?.id ?: 15,
+                cred?.id ?: 0,
                 edtTitle.text.toString(),
                 edtUid.text.toString(),
                 edtPwd.text.toString(),
@@ -67,10 +67,17 @@ class EditCredDialog(
             )
 //            Log.d("MyTag", cred2.toString())
             if (cred != null) {
-                homeViewModel?.addOrUpdateCred(cred2)
+                //Update
+                homeViewModel?.updateCred(cred2)
                 bookmarksViewModel?.updateCred(cred2)
+//                homeViewModel?.addOrUpdateCred(cred2)
+//                bookmarksViewModel?.updateCred(cred2)
             } else {
-                homeViewModel?.addOrUpdateCred(cred2)
+
+                //Insert
+                homeViewModel?.insertCred(cred2)
+                bookmarksViewModel?.insertCred(cred2)
+//                homeViewModel?.addOrUpdateCred(cred2)
             }
             dismiss()
         }

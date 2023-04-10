@@ -4,7 +4,7 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.dcapp.creds_keeper.db.CredDao
-import com.dcapp.creds_keeper.models.Cred
+import com.dcapp.creds_keeper.model.Cred
 import com.dcapp.creds_keeper.utils.Logger
 
 
@@ -65,6 +65,7 @@ class CredRepository(private val credDao : CredDao){
         try{
             cred.isBookmarked = !cred.isBookmarked
             updateCred(cred)
+            refreshData()
         }catch (e : Exception){
             Logger.error(e)
         }

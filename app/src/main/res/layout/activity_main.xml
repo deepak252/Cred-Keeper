@@ -10,7 +10,7 @@
 
         <variable
             name="mainViewModel"
-            type="com.dcapp.creds_keeper.viewmodel.MainViewModel" />
+            type="com.dcapp.creds_keeper.viewmodels.MainViewModel" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout

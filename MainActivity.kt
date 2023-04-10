@@ -3,6 +3,8 @@ package com.dcapp.creds_keeper
 import android.animation.LayoutTransition
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.ImageView
 import android.widget.Toast
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
@@ -10,12 +12,15 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.dcapp.creds_keeper.databinding.ActivityMainBinding
 import com.dcapp.creds_keeper.db.CredDatabase
+import com.dcapp.creds_keeper.model.Cred
 import com.dcapp.creds_keeper.repository.CredRepository
 import com.dcapp.creds_keeper.utils.KeyboardUtils
-import com.dcapp.creds_keeper.views.BookmarksFragment
-import com.dcapp.creds_keeper.views.HomeFragment
-import com.dcapp.creds_keeper.views.ProfileFragment
-import com.dcapp.creds_keeper.viewmodels.*
+import com.dcapp.creds_keeper.view.BookmarksFragment
+import com.dcapp.creds_keeper.view.HomeFragment
+import com.dcapp.creds_keeper.view.ProfileFragment
+import com.dcapp.creds_keeper.viewmodel.*
+import com.google.android.material.appbar.AppBarLayout
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 
 class MainActivity : AppCompatActivity() {
@@ -74,6 +79,7 @@ class MainActivity : AppCompatActivity() {
         binding.edtSearchCred.addTextChangedListener {
             if(mainViewModel.bottomNavIndexLiveData.value==0){
                 homeViewModel.searchCred(it.toString())
+//                homeViewModel.getCredLiveList(it.toString())
             }else if(mainViewModel.bottomNavIndexLiveData.value==1){
                 bookmarksViewModel.searchCred(it.toString())
             }

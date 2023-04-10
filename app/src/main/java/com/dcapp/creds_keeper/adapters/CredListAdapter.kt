@@ -1,11 +1,9 @@
-package com.dcapp.creds_keeper.adapter
+package com.dcapp.creds_keeper.adapters
 
-import android.app.ActionBar.LayoutParams
 import android.app.Activity
 import android.app.AlertDialog
 import android.graphics.drawable.GradientDrawable
 import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,17 +13,15 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.dcapp.creds_keeper.R
 import com.dcapp.creds_keeper.config.Constants
-import com.dcapp.creds_keeper.model.Cred
-import com.dcapp.creds_keeper.view.dialog.EditCredDialog
-import com.dcapp.creds_keeper.viewmodel.BookmarksViewModel
-import com.dcapp.creds_keeper.viewmodel.HomeViewModel
+import com.dcapp.creds_keeper.models.Cred
+import com.dcapp.creds_keeper.utils.Logger
+import com.dcapp.creds_keeper.views.dialog.EditCredDialog
+import com.dcapp.creds_keeper.viewmodels.BookmarksViewModel
+import com.dcapp.creds_keeper.viewmodels.HomeViewModel
 
-//class CredListAdapter(private val context : Activity, private val credLiveList : LiveData<ArrayList<Cred>> ) : RecyclerView.Adapter<CredListAdapter.CredViewHolder>(){
 class CredListAdapter(
     private val context : Activity,
     private val homeViewModel: HomeViewModel?=null,
@@ -40,9 +36,6 @@ class CredListAdapter(
         }else if(bookmarksViewModel!=null){
             credList = bookmarksViewModel.getBookmarkCredLiveList().value?: emptyList()
         }
-//        credLiveList.observe(context as LifecycleOwner){
-//            notifyDataSetChanged()
-//        }
     }
 
     fun setCreds(creds : List<Cred>){
@@ -81,6 +74,7 @@ class CredListAdapter(
     }
 
     override fun onBindViewHolder(holder: CredViewHolder, position: Int) {
+        Logger.message("onBindViewHolder : $position")
         val cred = credList[position]
         if(cred.title.isNotEmpty()){
             holder.tvLeading.text = cred.title.substring(0,1)
@@ -170,14 +164,16 @@ class CredListAdapter(
     }
 
     private fun toggleBookmarkCred(cred : Cred){
-        homeViewModel?.toggleBookmark(cred.id)
-        bookmarksViewModel?.toggleBookmark(cred.id)
+        homeViewModel?.toggleBookmark(cred)
+        bookmarksViewModel?.toggleBookmark(cred)
     }
 
     fun deleteCred(cred : Cred){
         if(homeViewModel!=null){
-            homeViewModel.deleteCred(cred.id)
-        }else bookmarksViewModel?.deleteCred(cred.id)
+            homeViewModel.deleteCred(cred)
+        }else{
+            bookmarksViewModel?.deleteCred(cred)
+        }
     }
 
 

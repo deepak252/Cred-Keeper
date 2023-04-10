@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcapp.creds_keeper.R
 import com.dcapp.creds_keeper.adapter.CredListAdapter
+import com.dcapp.creds_keeper.db.CredDatabase
 import com.dcapp.creds_keeper.repository.CredRepository
 import com.dcapp.creds_keeper.viewmodel.BookmarksViewModel
 import com.dcapp.creds_keeper.viewmodel.BookmarksViewModelFactory
@@ -31,8 +32,10 @@ class BookmarksFragment : Fragment() {
 
         val rvCredList: RecyclerView = view.findViewById(R.id.rvCredListBookmarks)
 
+        val credDao = CredDatabase.getDatabase(requireActivity()).credDao()
+        val credRepository = CredRepository(credDao)
         val bookmarksViewModel = ViewModelProvider(requireActivity(),BookmarksViewModelFactory(
-            CredRepository.getInstance()
+            credRepository
         ))[BookmarksViewModel::class.java]
 
         val credListAdapter = CredListAdapter(

@@ -1,25 +1,21 @@
-package com.dcapp.creds_keeper.view
+package com.dcapp.creds_keeper.views
 
-import android.app.ActionBar.LayoutParams
-import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcapp.creds_keeper.R
-import com.dcapp.creds_keeper.adapter.CredListAdapter
-import com.dcapp.creds_keeper.model.Cred
+import com.dcapp.creds_keeper.adapters.CredListAdapter
+import com.dcapp.creds_keeper.db.CredDatabase
 import com.dcapp.creds_keeper.repository.CredRepository
-import com.dcapp.creds_keeper.view.dialog.EditCredDialog
-import com.dcapp.creds_keeper.viewmodel.HomeViewModel
-import com.dcapp.creds_keeper.viewmodel.HomeViewModelFactory
+import com.dcapp.creds_keeper.views.dialog.EditCredDialog
+import com.dcapp.creds_keeper.viewmodels.HomeViewModel
+import com.dcapp.creds_keeper.viewmodels.HomeViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class HomeFragment : Fragment() {
@@ -39,7 +35,9 @@ class HomeFragment : Fragment() {
         btnAddNewCred = view.findViewById(R.id.btnAddNewCred)
         rvCredList = view.findViewById(R.id.rvCredListHome)
 
-        val homeViewModel = ViewModelProvider(requireActivity(),HomeViewModelFactory(CredRepository.getInstance()))[HomeViewModel::class.java]
+        val credDao = CredDatabase.getDatabase(requireActivity()).credDao()
+        val credRepository = CredRepository(credDao)
+        val homeViewModel = ViewModelProvider(requireActivity(),HomeViewModelFactory(credRepository))[HomeViewModel::class.java]
 
         btnAddNewCred.setOnClickListener{
             val addCredDialog = EditCredDialog(requireActivity(), homeViewModel = homeViewModel)
@@ -66,11 +64,9 @@ class HomeFragment : Fragment() {
         }
 
         homeViewModel.getCredLiveList().observe(requireActivity()) {
-            creds->credListAdapter.setCreds(creds)
+            creds->credListAdapter.setCreds(creds?: emptyList())
         }
 
     }
-
-
 
 }
