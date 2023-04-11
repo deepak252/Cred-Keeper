@@ -39,8 +39,9 @@ class BookmarksFragment : Fragment() {
 
         val credListAdapter = CredListAdapter(
             activity as Activity,
-            bookmarksViewModel = bookmarksViewModel
+            bookmarksViewModel = bookmarksViewModel,
         )
+//        credListAdapter.submitList(bookmarksViewModel.getBookmarkCredLiveList().value)
 
         rvCredList.apply {
             adapter = credListAdapter
@@ -54,7 +55,8 @@ class BookmarksFragment : Fragment() {
         }
 
         bookmarksViewModel.getBookmarkCredLiveList().observe(requireActivity()){
-            creds->credListAdapter.setCreds(creds)
+//                creds->credListAdapter.setCreds(creds)
+            creds->credListAdapter.submitList(creds)
         }
     }
 

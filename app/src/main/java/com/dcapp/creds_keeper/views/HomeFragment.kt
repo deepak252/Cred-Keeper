@@ -1,22 +1,26 @@
 package com.dcapp.creds_keeper.views
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcapp.creds_keeper.R
 import com.dcapp.creds_keeper.adapters.CredListAdapter
 import com.dcapp.creds_keeper.db.CredDatabase
+import com.dcapp.creds_keeper.models.Cred
 import com.dcapp.creds_keeper.repository.CredRepository
 import com.dcapp.creds_keeper.views.dialog.EditCredDialog
 import com.dcapp.creds_keeper.viewmodels.HomeViewModel
 import com.dcapp.creds_keeper.viewmodels.HomeViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.launch
 
 class HomeFragment : Fragment() {
     lateinit var btnAddNewCred : FloatingActionButton
@@ -49,8 +53,9 @@ class HomeFragment : Fragment() {
 
         val credListAdapter = CredListAdapter(
             requireActivity(),
-            homeViewModel = homeViewModel
+            homeViewModel = homeViewModel,
         )
+//        credListAdapter.submitList(homeViewModel.getCredLiveList().value)
 
         rvCredList.apply {
             adapter = credListAdapter
@@ -64,7 +69,16 @@ class HomeFragment : Fragment() {
         }
 
         homeViewModel.getCredLiveList().observe(requireActivity()) {
-            creds->credListAdapter.setCreds(creds?: emptyList())
+//            lifecycleScope.launch{
+//                Log.d("MyTag","Updated")
+//                credListAdapter.submitList(it)
+//            }
+
+//                creds->credListAdapter.setCreds(creds?: emptyList())
+            creds->credListAdapter.submitList(creds)
+//            var newCreds = mutableListOf<Cred>()
+//            newCreds.addAll(it)
+            Log.d("MyTag", "Updated")
         }
 
     }
