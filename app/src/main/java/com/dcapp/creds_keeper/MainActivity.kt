@@ -9,15 +9,15 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.dcapp.creds_keeper.databinding.ActivityMainBinding
-import com.dcapp.creds_keeper.db.CredDatabase
-import com.dcapp.creds_keeper.repository.CredRepository
 import com.dcapp.creds_keeper.utils.KeyboardUtils
 import com.dcapp.creds_keeper.views.BookmarksFragment
 import com.dcapp.creds_keeper.views.HomeFragment
 import com.dcapp.creds_keeper.views.ProfileFragment
 import com.dcapp.creds_keeper.viewmodels.*
+import dagger.hilt.android.AndroidEntryPoint
 
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     private val homeFragment = HomeFragment()
     private val bookmarksFragment = BookmarksFragment()
@@ -32,10 +32,8 @@ class MainActivity : AppCompatActivity() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
         binding.lifecycleOwner = this
 
-        val credDao = CredDatabase.getDatabase(this).credDao()
-        val credRepository = CredRepository(credDao)
-        homeViewModel = ViewModelProvider(this, HomeViewModelFactory(credRepository))[HomeViewModel::class.java]
-        bookmarksViewModel = ViewModelProvider(this, BookmarksViewModelFactory(credRepository))[BookmarksViewModel::class.java]
+        homeViewModel = ViewModelProvider(this)[HomeViewModel::class.java]
+        bookmarksViewModel = ViewModelProvider(this)[BookmarksViewModel::class.java]
         mainViewModel = ViewModelProvider(this)[MainViewModel::class.java]
         binding.mainViewModel = mainViewModel
 

@@ -3,8 +3,11 @@ package com.dcapp.creds_keeper.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class MainViewModel : ViewModel() {
+@HiltViewModel
+class MainViewModel @Inject constructor() : ViewModel() {
     private var bottomNavIndex = MutableLiveData(0)
     private var isSearchEnabled = MutableLiveData(false)
 

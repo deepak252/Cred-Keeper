@@ -21,8 +21,9 @@ import com.dcapp.creds_keeper.utils.Logger
 import com.dcapp.creds_keeper.views.dialog.EditCredDialog
 import com.dcapp.creds_keeper.viewmodels.BookmarksViewModel
 import com.dcapp.creds_keeper.viewmodels.HomeViewModel
+import javax.inject.Inject
 
-class CredListAdapter(
+class CredListAdapter (
     private val context : Activity,
     private val homeViewModel: HomeViewModel?=null,
     private val bookmarksViewModel: BookmarksViewModel?=null,
@@ -168,7 +169,7 @@ class CredListAdapter(
         bookmarksViewModel?.toggleBookmark(cred)
     }
 
-    fun deleteCred(cred : Cred){
+    private fun deleteCred(cred : Cred){
         if(homeViewModel!=null){
             homeViewModel.deleteCred(cred)
         }else{

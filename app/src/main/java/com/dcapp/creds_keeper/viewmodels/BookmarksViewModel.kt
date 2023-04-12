@@ -5,10 +5,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.dcapp.creds_keeper.models.Cred
 import com.dcapp.creds_keeper.repository.CredRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class BookmarksViewModel(private val credRepository: CredRepository) : ViewModel(){
+@HiltViewModel
+class BookmarksViewModel @Inject constructor(private val credRepository: CredRepository) : ViewModel(){
     init {
         viewModelScope.launch(Dispatchers.IO) {
             credRepository.fetchBookmarkedCreds()

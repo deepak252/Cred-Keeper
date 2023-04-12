@@ -6,21 +6,9 @@ import androidx.lifecycle.MutableLiveData
 import com.dcapp.creds_keeper.db.CredDao
 import com.dcapp.creds_keeper.models.Cred
 import com.dcapp.creds_keeper.utils.Logger
+import javax.inject.Inject
 
-
-var creds = arrayListOf<Cred>(
-    Cred(0,"Coding Ninja", "deepak@gmail.com", "1234","",false),
-    Cred(1,"Codeforces", "deepak@gmail.com", "981234","",true),
-    Cred(2,"Gmail", "deepak@gmail.com", "SD1234","",false),
-    Cred(3,"Google", "deepak@gmail.com", "##1234","",true),
-    Cred(4,"Facebook", "deepak@gmail.com", "GHD1234","",true),
-    Cred(5,"Twitter", "deepak@gmail.com", "0931234","",false),
-    Cred(6,"Instagram", "deepak@gmail.com", "ERER013234","",false),
-    Cred(7,"Flipkart", "deepak@gmail.com", "FLIP@#$@","",false),
-)
-
-
-class CredRepository(private val credDao : CredDao){
+class CredRepository @Inject constructor(private val credDao : CredDao){
     private val _allCreds= MutableLiveData<List<Cred>>()
     private val _bookmarkedCreds = MutableLiveData<List<Cred>>()
 
@@ -33,9 +21,6 @@ class CredRepository(private val credDao : CredDao){
     suspend fun fetchAllCreds(){
         _allCreds.postValue(credDao.getAllCreds())
     }
-//    fun fetchAllCreds():LiveData<List<Cred>>{
-//        return credDao.getAllCreds()
-//    }
 
     suspend fun fetchBookmarkedCreds(){
         _bookmarkedCreds.postValue(credDao.getBookmarkedCreds())

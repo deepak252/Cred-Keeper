@@ -12,12 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcapp.creds_keeper.R
 import com.dcapp.creds_keeper.adapters.CredListAdapter
-import com.dcapp.creds_keeper.db.CredDatabase
-import com.dcapp.creds_keeper.repository.CredRepository
+import com.dcapp.creds_keeper.utils.Logger
 import com.dcapp.creds_keeper.viewmodels.BookmarksViewModel
-import com.dcapp.creds_keeper.viewmodels.BookmarksViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class BookmarksFragment : Fragment() {
+    lateinit var rvCredList : RecyclerView
+    lateinit var bookmarksViewModel : BookmarksViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -29,13 +31,9 @@ class BookmarksFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val rvCredList: RecyclerView = view.findViewById(R.id.rvCredListBookmarks)
+        rvCredList = view.findViewById(R.id.rvCredListBookmarks)
 
-        val credDao = CredDatabase.getDatabase(requireActivity()).credDao()
-        val credRepository = CredRepository(credDao)
-        val bookmarksViewModel = ViewModelProvider(requireActivity(),BookmarksViewModelFactory(
-            credRepository
-        ))[BookmarksViewModel::class.java]
+        bookmarksViewModel = ViewModelProvider(requireActivity())[BookmarksViewModel::class.java]
 
         val credListAdapter = CredListAdapter(
             activity as Activity,
@@ -55,6 +53,7 @@ class BookmarksFragment : Fragment() {
 
         bookmarksViewModel.getBookmarkCredLiveList().observe(requireActivity()){
             creds->credListAdapter.setCreds(creds)
+            Logger.message("Bookmarks Observer")
         }
     }
 

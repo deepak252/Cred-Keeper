@@ -11,16 +11,17 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dcapp.creds_keeper.R
 import com.dcapp.creds_keeper.adapters.CredListAdapter
-import com.dcapp.creds_keeper.db.CredDatabase
-import com.dcapp.creds_keeper.repository.CredRepository
+import com.dcapp.creds_keeper.utils.Logger
 import com.dcapp.creds_keeper.views.dialog.EditCredDialog
 import com.dcapp.creds_keeper.viewmodels.HomeViewModel
-import com.dcapp.creds_keeper.viewmodels.HomeViewModelFactory
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeFragment : Fragment() {
     lateinit var btnAddNewCred : FloatingActionButton
     lateinit var rvCredList : RecyclerView
+    lateinit var homeViewModel: HomeViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -35,9 +36,7 @@ class HomeFragment : Fragment() {
         btnAddNewCred = view.findViewById(R.id.btnAddNewCred)
         rvCredList = view.findViewById(R.id.rvCredListHome)
 
-        val credDao = CredDatabase.getDatabase(requireActivity()).credDao()
-        val credRepository = CredRepository(credDao)
-        val homeViewModel = ViewModelProvider(requireActivity(),HomeViewModelFactory(credRepository))[HomeViewModel::class.java]
+        homeViewModel = ViewModelProvider(requireActivity())[HomeViewModel::class.java]
 
         btnAddNewCred.setOnClickListener{
             val addCredDialog = EditCredDialog(requireActivity(), homeViewModel = homeViewModel)
@@ -65,6 +64,7 @@ class HomeFragment : Fragment() {
 
         homeViewModel.getCredLiveList().observe(requireActivity()) {
             creds->credListAdapter.setCreds(creds?: emptyList())
+            Logger.message("Home Observer")
         }
 
     }
